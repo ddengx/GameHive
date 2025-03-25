@@ -25,7 +25,7 @@ struct GameHiveApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FavoritesView()
         }
         .modelContainer(sharedModelContainer)
     }
