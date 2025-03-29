@@ -25,9 +25,3 @@ class FavoritesViewModel: ObservableObject {
         favoriteGames.removeAll { $0.id == game.id }
     }
 }
-
-struct Game: Identifiable {
-    let id: Int
-    let title: String
-    let image: String
-}
