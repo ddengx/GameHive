@@ -33,38 +33,6 @@ struct FavoritesView: View {
                     }
                 }
                 Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: {}) {
-                        Image(systemName: "house.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                    Button(action: {}) {
-                        Image(systemName: "heart.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                    Button(action: {}) {
-                        Image(systemName: "map.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                }
-                .frame(height: 60)
-                .background(Color.purple)
-                .clipShape(Capsule())
-                .padding(.horizontal, 30)
-                .padding(.bottom, 20)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -74,6 +42,7 @@ struct FavoritesView: View {
         }
     }
 }
+
 struct GameRow: View {
     let game: Game
     let editMode: Bool

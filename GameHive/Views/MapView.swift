@@ -49,37 +49,6 @@ struct MapView: View {
             .cornerRadius(12)
             .padding(.top, 5)
             Spacer()
-            HStack {
-                Spacer()
-                Button(action: {}) {
-                    Image(systemName: "house.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(.white)
-                }
-                Spacer()
-                Button(action: {}) {
-                    Image(systemName: "heart.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(.white)
-                }
-                Spacer()
-                Button(action: {}) {
-                    Image(systemName: "map.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(.white)
-                }
-                Spacer()
-            }
-            .frame(height: 43)
-            .background(Color.purple)
-            .clipShape(Capsule())
-            .padding(.horizontal, 30)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black.edgesIgnoringSafeArea(.all))
