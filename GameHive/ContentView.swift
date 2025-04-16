@@ -9,47 +9,55 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Environment(\.modelContext) var modelContext
+    @Query var games: [Game]
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
+                ForEach(games) { game in
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        VStack {
+                            Text("Game Title: \(game.title)")
+                            Text("Game ID: \(game.id)")
+                            Image(game.image)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        .padding()
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text(game.title)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteGames)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    Button(action: addGame) {
+                        Label("Add Game", systemImage: "plus")
                     }
                 }
             }
         } detail: {
-            Text("Select an item")
+            Text("Select a game")
         }
     }
 
-    private func addItem() {
+    private func addGame() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            let newGame = Game(id: Int.random(in: 1000...9999), title: "Sample Game", image: "game1")
+            modelContext.insert(newGame)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteGames(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(games[index])
             }
         }
     }
@@ -57,5 +65,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Game.self, inMemory: true)
 }

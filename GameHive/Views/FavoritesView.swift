@@ -40,6 +40,9 @@ struct FavoritesView: View {
                 viewModel.toggleEditing()
             }.foregroundColor(.white))
         }
+        .onAppear {
+            viewModel.objectWillChange.send()
+        }
     }
 }
 

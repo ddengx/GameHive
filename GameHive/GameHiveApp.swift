@@ -13,7 +13,7 @@ struct GameHiveApp: App {
     @State private var selectedTab = 0
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Game.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

@@ -6,22 +6,21 @@
 //
 
 import SwiftUI
+import SwiftData
 
 class FavoritesViewModel: ObservableObject {
+    @Environment(\.modelContext) var modelContext
+    @Query var favoriteGames: [Game] 
+
     @Published var editMode = false
-    @Published var favoriteGames: [Game] = [
-        Game(id: 1, title: "Example Title", image: "game1"),
-        Game(id: 2, title: "Example Title", image: "game2"),
-        Game(id: 3, title: "Example Title", image: "game3"),
-        Game(id: 4, title: "Example Title", image: "game4"),
-        Game(id: 5, title: "Example Title", image: "game5")
-    ]
-    
+
     func toggleEditing() {
         editMode.toggle()
     }
     
     func deleteGame(_ game: Game) {
-        favoriteGames.removeAll { $0.id == game.id }
+        withAnimation {
+            modelContext.delete(game)
+        }
     }
 }
