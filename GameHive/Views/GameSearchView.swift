@@ -4,50 +4,85 @@
 //
 //  Created by mgmoen1 on 3/25/25.
 //
+//  This is the game search view
+//  Displays search results based on a user query
 
 import SwiftUI
 
 struct GameSearchView: View {
-    @StateObject var viewModel = GameSearchViewModel()
-    @State private var gameSearchText = ""
-    let placeholderGames = Array(repeating: "game5", count: 12)
-
+    @EnvironmentObject var rawgVM: RawgViewModel
+    @StateObject var searchVM = GameSearchViewModel()
+    @State private var searchText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
+    
     var body: some View {
         NavigationView {
-            VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                    TextField("Search for titles...", text: $gameSearchText)
-                }
-                .padding()
-                .background()
-                .frame(width:350, height: 50)
-                .cornerRadius(10)
-                .padding(.top, 20)
-                .padding(.bottom, 8)
-                ScrollView {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 20) {
-                        ForEach(0..<placeholderGames.count, id: \.self) { index in
-                            VStack {
-                                Image(placeholderGames[index])
-                                    .resizable()
-                                    .frame(width: 115, height: 140)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            ZStack {
+                Color.black.edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 20) {
+                    // Search bar
+                    VStack(spacing: 15) {
+                        Text("Search Games")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack {
+                            TextField("Enter game title...", text: $searchText)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 250, height: 40)
+                                .padding(.leading)
+                                .focused($isTextFieldFocused)
+                                .submitLabel(.search)
+                                .onSubmit {
+                                    searchVM.performSearch(query: searchText)
+                                    isTextFieldFocused = false
+                                }
 
-                                Text("Example")
-                                    .foregroundColor(.white)
-                                    .font(.caption)
+                            Button("Search") {
+                                searchVM.performSearch(query: searchText)
+                                isTextFieldFocused = false
                             }
-                            .padding(10)
-                            .cornerRadius(10)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.purple)
+                            .foregroundColor(.white)
+                            .padding(.trailing)
                         }
                     }
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal)
+                    
+                    // Display results here !!
+                    if searchVM.isSearching {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(1.5)
+                        Spacer()
+                    } else {
+                        ScrollView {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 15), count: 3), spacing: 20) {
+                                ForEach(searchVM.searchResults) { game in
+                                    NavigationLink(destination: GameDetailView(rawgVM: rawgVM, gameId: game.id, game: game)) {
+                                        GameCardView(game: game)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
                 }
-                Spacer()
+                .padding(.top, 20)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.edgesIgnoringSafeArea(.all))
+        }
+        .accentColor(.purple)
+        .onAppear {
+            // Not sure if this is needed or not
+            // Tried with and without - no changes
+            searchVM.setRawgViewModel(rawgVM)
         }
     }
 }

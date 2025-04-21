@@ -4,6 +4,8 @@
 //
 //  Created by Darren Deng on 3/29/25.
 //
+//  This is the pill bar down low
+//  Used to navigate between views
 
 import SwiftUI
 

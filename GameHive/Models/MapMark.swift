@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct mapMark: Identifiable {
+struct MapMark: Identifiable {
     let id = UUID()
     let mapMark: MKMapItem
 }

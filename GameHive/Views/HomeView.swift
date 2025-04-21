@@ -4,30 +4,34 @@
 //
 //  Created by Darren Deng on 3/25/25.
 //
+//  This is the home view for GameHive
+//  When the app is launched, this is presented first
+//  Shows 3 interesting categories for video game discovery
 
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var rawgVM: RawgViewModel
     @State var gameSearchText: String = ""
     var body: some View {
         NavigationView {
             ZStack {
                 VStack(spacing: 0) {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                        TextField("Search for titles...", text: $gameSearchText)
+                    HStack(spacing: 0) {
+                        Text("Game")
+                            .foregroundColor(.purple)
+                            .fontWeight(.bold)
+                        Text("Hive")
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
                     }
-                    .padding()
-                    .background()
-                    .frame(width:350, height: 50)
-                    .cornerRadius(10)
-                    .padding(.top, 20)
-                    .padding(.bottom, 8)
-                    
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 1, y: 1)
+
                     VStack(spacing: 0) {
-                        GameCategoryView(title: "Trending")
-                        GameCategoryView(title: "Upcoming")
-                        GameCategoryView(title: "Top Rated Games")
+                        GameCategoryView(rawgVM: rawgVM, games: rawgVM.topRatedGames, title: "Top Rated Games")
+                        GameCategoryView(rawgVM: rawgVM, games: rawgVM.anticipatedGames, title: "Most Anticipated")
+                        GameCategoryView(rawgVM: rawgVM, games: rawgVM.upcomingGames, title: "Upcoming")
                     }
                     .padding(.top, 10)
                     Spacer()
@@ -36,54 +40,11 @@ struct HomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.black.edgesIgnoringSafeArea(.all))
         }
-    }
-}
-
-struct GameCategoryView: View {
-    @StateObject var viewModel = GameSearchViewModel()
-    let placeholderGames = Array(repeating: "game4", count: 12)
-    var title: String
-    var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            HStack {
-                NavigationLink(destination: Text("Games in \(title) category")) {
-                    Text(title)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.white)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.top, 1)
-            .padding(.bottom, 5)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(0..<placeholderGames.count, id: \.self) { index in
-                        VStack(spacing: 5) {
-                            Image(placeholderGames[index])
-                                .resizable()
-                                .frame(width: 115, height: 140)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-
-                            Text("Example")
-                                .foregroundColor(.white)
-                                .font(.caption)
-                        }
-                        .padding(5)
-                        .cornerRadius(10)
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .frame(height: 165)
+        .accentColor(.purple)
+        .onAppear {
+            rawgVM.fetchTopRatedGames()
+            rawgVM.fetchAnticipatedGames()
+            rawgVM.fetchUpcomingGames()
         }
-        .padding(.vertical, 5)
     }
-}
-
-#Preview {
-    HomeView()
 }
