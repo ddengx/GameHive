@@ -35,7 +35,7 @@ class RawgViewModel: ObservableObject {
     @Published var isLoadingGameDetails: Bool = false
     @Published var selectedGameDetail: RawgGameDetail?
     
-    private let apiKey = "8e45cb116d2944179df64c6625ccf674"
+    private let apiKey = APIKEY
     private let baseURL = "https://api.rawg.io/api"
     
     init() { }
